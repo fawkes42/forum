@@ -1,3 +1,4 @@
+import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
 
@@ -7,9 +8,7 @@ export function Post(props) {
             <header>
                 <div className={styles.author}>
                     <div className={styles.avatar}>
-                        <img
-                            src="https://github.com/fawkes42.png"
-                        />
+                        <Avatar src={props.avatar} useGradient />
                     </div>
                     <div className={styles.authorInfo}>
                         <strong>{props.author}</strong>

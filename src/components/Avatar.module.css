@@ -1,0 +1,27 @@
+.avatarGray, .avatarGradient {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatarGray::before, .avatarGradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%; 
+    padding: 0.1rem;
+    border: 3px solid var(--gray-800);
+}
+
+.avatarGradient::before {
+    border: 0;
+    background: linear-gradient(to right, var(--purple-500), var(--green-500));
+}
+
+.avatarGray, .avatarGradient, .avatarGradient img, .avatarGray img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    position: relative;
+    padding: 0.1rem;
+}
