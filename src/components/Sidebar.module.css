@@ -1,0 +1,86 @@
+.sidebar {
+    background: var(--gray-800);
+    overflow: hidden;
+    border-radius: 0.5rem;
+}
+
+.cover {
+    width: 100%;
+    height: 70px;
+    object-fit: cover;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile img {
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+    border: 3px solid var(--gray-800);
+    border-radius: 50%;
+    margin-top: -1.875rem;
+    margin-bottom: 0.5rem;
+    box-sizing: initial;
+}
+
+.profile strong {
+    color: var(--gray-100);
+    line-height: 1.6rem;
+}
+
+.profile span {
+    font-size: 0.875rem;
+    color: var(--gray-400);
+    line-height: 1.6rem;
+}
+
+.sidebar footer {
+    border-top: 1px solid var(--gray-600);
+    margin-top: 0.5rem;
+    padding: 1rem 2rem;
+}
+
+.sidebar footer a {
+    width: 100%;
+    background: linear-gradient(to right, var(--purple-500), var(--green-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 0.875rem;
+    text-decoration: none;
+    height: 3rem;
+    padding: 0 1.5rem;
+    font-weight: bold;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.sidebar footer a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 0.5rem; 
+    padding: 0.1rem; 
+    background: linear-gradient(to right, var(--purple-500), var(--green-500));
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude; 
+}
+
+.sidebar footer a:hover {
+    background: var(--purple-500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar footer a:hover::before {
+    background: var(--purple-500);
+}
