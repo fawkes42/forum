@@ -2,35 +2,88 @@ import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
 
-export function Post(props) {
+export function Post({ author, publishedAt, content }) {
+
+    const publishedDate = new Date(publishedAt)
+        .toLocaleDateString(
+            'en-US',
+            {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+            }
+        );
+
+    // difference between publiched date and current date in days, hours, minutes, seconds
+    const difference = (new Date() - new Date(publishedAt)) / 1000;
+    const days = Math.floor(difference / 86400);
+    const hours = Math.floor(difference / 3600) % 24;
+    const minutes = Math.floor(difference / 60) % 60;
+    const seconds = Math.floor(difference) % 60;
+
+
+
     return (
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
                     <div className={styles.avatar}>
-                        <Avatar src={props.avatar} useGradient />
+                        <Avatar src={author.avatarUrl} useGradient />
                     </div>
                     <div className={styles.authorInfo}>
-                        <strong>{props.author}</strong>
-                        <span>{props.content}</span>
+                        <strong>{author.name}</strong>
+                        <span>{author.role}</span>
                     </div>
                 </div>
-                <time title="September 06 at 09:25" dateTime='2022-09-06 09:25:00'>
-                    Published on 06/09/2022
+                <time
+                    title={
+                        new Date(publishedDate).toLocaleDateString(
+                            'en-US',
+                            {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                            }
+                        )
+                    }
+                    dateTime={publishedDate}
+                >
+                    Published {` 
+                        ${days ?
+                            `${days > 1 ? `${days} days` : `${days} day`}`
+                            : hours
+                                ? `${hours > 1 ? `${hours} hours` : `${hours} hour`}`
+                                : minutes
+                                    ? `${minutes > 1 ? `${minutes} minutes` : `${minutes} minute`}`
+                                    : `${seconds > 1 ? `${seconds} seconds` : `${seconds} second`}`
+                        }  
+                        ago`}
                 </time>
             </header>
 
             <div className={styles.content}>
-                <p>Hello guys</p>
-                <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. In magnam odio necessitatibus ipsum! Molestias vel maxime ut nulla, illum, similique explicabo suscipit aperiam unde vitae, pariatur nesciunt dolores libero debitis.
-                </p>
-                <p>
-                    <a href="#">fawkes42</a>
-                </p>
-                <p>
-                    <a href="#">#development #nlw #react</a>
-                </p>
+                {
+                    content.map((c, index) => {
+                        if (c.type === 'paragraph') {
+                            return (
+                                <p key={index}>
+                                    {c.text}
+                                </p>
+                            )
+                        }
+                        else if (c.type === 'link') {
+                            return (
+                                <p key={index}>
+                                    <a href="">{c.text}</a>
+                                </p>
+                            )
+                        }
+                    })
+                }
             </div>
 
             <form className={styles.commentForm}>
