@@ -1,3 +1,4 @@
+import { formatDistanceToNow } from 'date-fns';
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
@@ -52,16 +53,12 @@ export function Post({ author, publishedAt, content }) {
                     }
                     dateTime={publishedDate}
                 >
-                    Published {` 
-                        ${days ?
-                            `${days > 1 ? `${days} days` : `${days} day`}`
-                            : hours
-                                ? `${hours > 1 ? `${hours} hours` : `${hours} hour`}`
-                                : minutes
-                                    ? `${minutes > 1 ? `${minutes} minutes` : `${minutes} minute`}`
-                                    : `${seconds > 1 ? `${seconds} seconds` : `${seconds} second`}`
-                        }  
-                        ago`}
+                    Published {
+                        formatDistanceToNow(
+                            new Date(publishedAt),
+                            { addSuffix: true }
+                        )
+                    }
                 </time>
             </header>
 
