@@ -1,9 +1,24 @@
 import { formatDistanceToNow } from 'date-fns';
+import { useState } from 'react';
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
 
 export function Post({ author, publishedAt, content }) {
+
+    const [comments, setComments] = useState([
+        {
+            id: 1,
+            author: {
+                name: 'John Doe',
+                avatarUrl: 'https://i.pravatar.cc/209?img=67',
+            },
+            publishedAt: '2021-01-01T12:00:00.000Z',
+            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl sit amet nisl. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl sit amet nisl.'
+        }
+    ]);
+
+    const [newComment, setNewComment] = useState('');
 
     const publishedDate = new Date(publishedAt)
         .toLocaleDateString(
@@ -17,14 +32,35 @@ export function Post({ author, publishedAt, content }) {
             }
         );
 
-    // difference between publiched date and current date in days, hours, minutes, seconds
-    const difference = (new Date() - new Date(publishedAt)) / 1000;
-    const days = Math.floor(difference / 86400);
-    const hours = Math.floor(difference / 3600) % 24;
-    const minutes = Math.floor(difference / 60) % 60;
-    const seconds = Math.floor(difference) % 60;
+    const handleFormSubmit = () => {
+        event.preventDefault();
+        setComments([...comments, {
+            id: Math.floor(Math.random() * 1000),
+            content: newComment,
+            author: {
+                name: 'John Doe',
+                avatarUrl: `https://i.pravatar.cc/${comments.length * 100 + 1}?img=${comments.length + 1}`,
+            },
+            publishedAt: '2021-01-01T12:00:00.000Z',
+        }]);
 
+        setNewComment('');
+    }
 
+    const handleNewCommentChange = () => {
+        event.target.setCustomValidity('');
+        setNewComment(event.target.value);
+    }
+
+    const handleInvalidFormSubmit = () => {
+        event.target.setCustomValidity('Comment cannot be published empty');
+    }
+
+    const isNewCommentEmpty = newComment.trim().length === 0;
+
+    const deleteComment = (id) => {
+        setComments(comments.filter((c) => c.id !== id));
+    }
 
     return (
         <article className={styles.post}>
@@ -83,18 +119,43 @@ export function Post({ author, publishedAt, content }) {
                 }
             </div>
 
-            <form className={styles.commentForm}>
+            <form onSubmit={handleFormSubmit} className={styles.commentForm}>
                 <strong>Give your Feedback</strong>
-                <textarea placeholder='Give your comment' />
+                <textarea
+                    name="comment"
+                    placeholder='Give your comment'
+                    value={newComment}
+                    onChange={handleNewCommentChange}
+                    onInvalid={handleInvalidFormSubmit}
+                    required
+                />
                 <footer>
-                    <button type='submit'>Comment</button>
+                    <button
+                        type='submit'
+                        disabled={isNewCommentEmpty}
+                    >
+                        Comment
+                    </button>
                 </footer>
             </form>
 
             <div className={styles.commentList}>
-                <Comment />
-                <Comment />
-                <Comment />
+                {
+                    comments.map((c) => {
+                        if (c) {
+                            return (
+                                <Comment
+                                    key={c.id}
+                                    id={c.id}
+                                    author={c.author}
+                                    publishedAt={c.publishedAt}
+                                    content={c.content}
+                                    onDelete={deleteComment}
+                                />
+                            )
+                        }
+                    })
+                }
             </div>
         </article>
     );

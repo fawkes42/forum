@@ -18,6 +18,11 @@
     border-radius: 10px;
 }
 
+:disabled {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+}
+
 input:focus, textarea:focus  {
     outline: transparent;
     box-shadow: 0 0 0 2px var(--purple-500);

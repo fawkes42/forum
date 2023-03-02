@@ -47,7 +47,7 @@ function App() {
       ]
     },
     {
-      id: 2,
+      id: 3,
       author: {
         name: "Giovanna Lopes",
         avatarUrl: "https://i.pravatar.cc/420?img=42",
