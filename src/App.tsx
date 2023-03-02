@@ -4,10 +4,11 @@ import './globals.css'
 import styles from './App.module.css';
 import { Sidebar } from "./components/Sidebar";
 import { Post } from "./components/Post";
+import { IPost } from "./interfaces/Post";
 
 function App() {
 
-  const posts = [
+  const posts: IPost[] = [
     {
       id: 1,
       author: {
@@ -15,7 +16,7 @@ function App() {
         avatarUrl: "https://github.com/fawkes42.png",
         role: "A real procrastinator"
       },
-      publishedAt: "2021-03-01T10:00:00.000Z",
+      publishedAt: new Date("2021-03-01T10:00:00.000Z"),
       content: [
         {
           type: "paragraph",
@@ -38,7 +39,7 @@ function App() {
         avatarUrl: "https://i.pravatar.cc/150?img=1",
         role: "Advocate"
       },
-      publishedAt: "2022-03-01T10:00:00.000Z",
+      publishedAt: new Date("2022-03-01T10:00:00.000Z"),
       content: [
         {
           type: "paragraph",
@@ -53,7 +54,7 @@ function App() {
         avatarUrl: "https://i.pravatar.cc/420?img=42",
         role: "Marketing"
       },
-      publishedAt: new Date() - 1000 * 60 * 60,
+      publishedAt: new Date(new Date().getTime() - 1000 * 60 * 60),
       content: [
         {
           type: "paragraph",
@@ -73,9 +74,7 @@ function App() {
             return (
               <Post
                 key={post.id}
-                author={post.author}
-                publishedAt={post.publishedAt}
-                content={post.content}
+                post={post}
               />
             )
           }

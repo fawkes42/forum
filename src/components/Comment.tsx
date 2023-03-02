@@ -1,11 +1,22 @@
 import { formatDistanceToNow } from 'date-fns';
 import { ThumbsUp, Trash } from 'phosphor-react';
 import { useState } from 'react';
+import { IComment } from '../interfaces/Comments';
 import { Avatar } from './Avatar';
 import styles from './Comment.module.css';
 
-export function Comment({ id, author, publishedAt, content, onDelete }) {
-    const [likes, setLikes] = useState(0);
+interface CommentProps {
+    comment: IComment;
+    onDelete: (id: number) => void;
+}
+
+export function Comment(
+    {
+        comment: { id, author, publishedAt, content },
+        onDelete,
+    }: CommentProps
+) {
+    const [likes, setLikes] = useState<number>(0);
 
     const handleLike = () => {
         setLikes(likes + 1);

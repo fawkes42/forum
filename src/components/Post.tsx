@@ -1,19 +1,33 @@
 import { formatDistanceToNow } from 'date-fns';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react';
+import { IComment } from '../interfaces/Comments';
+import { IPost } from '../interfaces/Post';
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
 
-export function Post({ author, publishedAt, content }) {
+interface PostProps {
+    post: IPost;
+}
 
-    const [comments, setComments] = useState([
+export function Post({
+    post: {
+        id,
+        author,
+        publishedAt,
+        content
+    }
+}: PostProps) {
+
+    const [comments, setComments] = useState<IComment[]>([
         {
             id: 1,
             author: {
                 name: 'John Doe',
                 avatarUrl: 'https://i.pravatar.cc/209?img=67',
+                role: 'Software Engineer'
             },
-            publishedAt: '2021-01-01T12:00:00.000Z',
+            publishedAt: new Date('2021-01-01T12:00:00.000Z'),
             content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl sit amet nisl. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl sit amet nisl.'
         }
     ]);
@@ -32,7 +46,7 @@ export function Post({ author, publishedAt, content }) {
             }
         );
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = (event: FormEvent) => {
         event.preventDefault();
         setComments([...comments, {
             id: Math.floor(Math.random() * 1000),
@@ -40,25 +54,26 @@ export function Post({ author, publishedAt, content }) {
             author: {
                 name: 'John Doe',
                 avatarUrl: `https://i.pravatar.cc/${comments.length * 100 + 1}?img=${comments.length + 1}`,
+                role: 'Software Engineer'
             },
-            publishedAt: '2021-01-01T12:00:00.000Z',
+            publishedAt: new Date('2021-01-01T12:00:00.000Z'),
         }]);
 
         setNewComment('');
     }
 
-    const handleNewCommentChange = () => {
+    const handleNewCommentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         event.target.setCustomValidity('');
         setNewComment(event.target.value);
     }
 
-    const handleInvalidFormSubmit = () => {
+    const handleInvalidFormSubmit = (event: InvalidEvent<HTMLTextAreaElement>) => {
         event.target.setCustomValidity('Comment cannot be published empty');
     }
 
     const isNewCommentEmpty = newComment.trim().length === 0;
 
-    const deleteComment = (id) => {
+    const deleteComment = (id: number) => {
         setComments(comments.filter((c) => c.id !== id));
     }
 
@@ -141,15 +156,12 @@ export function Post({ author, publishedAt, content }) {
 
             <div className={styles.commentList}>
                 {
-                    comments.map((c) => {
-                        if (c) {
+                    comments.map((comment) => {
+                        if (comment) {
                             return (
                                 <Comment
-                                    key={c.id}
-                                    id={c.id}
-                                    author={c.author}
-                                    publishedAt={c.publishedAt}
-                                    content={c.content}
+                                    key={comment.id}
+                                    comment={comment}
                                     onDelete={deleteComment}
                                 />
                             )
